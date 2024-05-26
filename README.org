@@ -1,0 +1,12 @@
+#+title: ide-zero.el - Make Emacs IDE-like!
+#+author: rennsax
+
+#+begin_quote
+WIP: this project is still in development! Some features are missing. But I'll
+be happy if you can try it out. If you use flycheck and Eglot at this moment,
+ide-zero works just fine.
+#+end_quote
+
+Ide-zero provides a useful macro: ~ide-zero-define~ which can be used to
+configure IDE features (linting, LSP, etc.) in a breeze, without caring about
+the implementation under the hood.
