@@ -211,7 +211,6 @@ PLIST:
 
 (defun ide-zero--handle-linter/flycheck ()
   "Handle LINTER for `flycheck'."
-  (message "%s" ide-zero--linter)
   (cond
    ((eq ide-zero--linter 'lsp)
     (when (and ide-zero-linter-lsp-warning
