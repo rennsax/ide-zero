@@ -10,3 +10,59 @@ ide-zero works just fine.
 Ide-zero provides a useful macro: ~ide-zero-define~ which can be used to
 configure IDE features (linting, LSP, etc.) in a breeze, without caring about
 the implementation under the hood.
+
+* Installation
+
+Clone this repository to your =/path/to/ide-zero=, and then add it to your
+Emacs's load path.
+
+#+begin_src emacs-lisp
+(add-to-list 'load-path "/path/to/ide-zero")
+(require 'ide-zero)
+
+;; Or, if you want to byte compile your configuration:
+(eval-when-compile (require 'ide-zero))
+#+end_src
+
+Ide-zero has zero external dependencies. (But make sure you have necessary
+packages installed, so the auto-generated configurations can work.) The only
+thing ide-zero does is providing the macro ~ide-zero-define~. It's the only
+entrypoint of ide-zero, unless you want to extend it.
+
+* Example Configuration
+
+First, you need to know that ~ide-zero-define~ decides which combination of
+configurations to generate via two customizable variables: ~ide-zero-lsp-client~
+and ~ide-zero-linter-client~. You can customize these variable by ~M-x customize-group ide-zero~.
+
+For example, in my case, I have ~ide-zero-lsp-client~ set to ~eglot~, and
+~ide-zero-linter-client~ set to ~flycheck~. Then, after properly configuring
+~eglot~ and ~flycheck~ themselves, I can write:
+
+#+begin_src emacs-lisp
+(ide-zero-define go
+                 :mode (go-mode go-ts-mode)
+                 :lsp ("gopls")
+                 :linter golangci-lint)
+#+end_src
+
+The easiest way to inspect what ~ide-zero-define~ generates for you is executing
+~pp-macroexpand-expression~ on the expression. For the example above,
+~ide-zero-define~:
+- Define a global minor mode ~go-ide-zero-mode~. If this mode is enabled, by
+  hooked into ~go-mode-hook~ and ~go-ts-mode-hook~, the desired LSP and linter
+  are setup automatically.
+- Define a command ~go-ide-zero-mode-setup-now~, which is used by
+  ~go-ide-zero-mode~ under the hood. It will setup the current buffer with your
+  specification.
+
+And the following plist passed to the macro, in ide-zero, I call it an
+"IDE specification". The specification of the example above means:
+- Use the command ~gopls~ to start the LSP server.
+- Use ~golangci-lint~ (in this case, it's a valid flycheck checker for
+  ~go-mode~) as the default linter.
+
+No matter which LSP client or which linter client you choose, ~ide-zero-define~
+manages to generate the corresponding configurations for you, leaving you away
+from the tedious documentation of other packages. It's just as simple as a
+breeze, quite neat and clean.
