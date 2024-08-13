@@ -143,6 +143,7 @@ PLIST:
     can manually configure your LSP client `ide-zero-lsp-client'.
 
     If not given, configure nothing for linter."
+  (declare (indent 4))
   (let* ((mode (plist-get plist :mode))
          (lsp (plist-get plist :lsp))
          (linter (plist-get plist :linter))
